@@ -1,0 +1,8 @@
+ - Functions must be executed from the caller files.
+ - Only the following files must be submitted:
+ 	* exercise_1.py
+ 	* exercise_2.py
+ 	* exercise_3.py
+ 	* exercise_4.py
+ - Do not modify the file names or function headers.
+ - The caller files can be modified as desired.
