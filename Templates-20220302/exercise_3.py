@@ -6,7 +6,15 @@
 def prime(a, b):
 	# Your code here
 	primes = []
-	
+	primo = 1
+	for i in range (a, b):
+		primo = 1
+		for j in range (2, i-1):
+			if i%j==0:
+				primo = 0
+				break
+		if primo == 1:
+			primes.append(i)
 	# ...
 
 	return primes
