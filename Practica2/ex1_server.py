@@ -15,7 +15,6 @@ def main(host, port):
     n = n.decode("utf_8")
     num = int(n)
     
-    belowContador = 0
 
     for i in range (0, num):
 
@@ -24,15 +23,13 @@ def main(host, port):
 
         if y  <  sqrt(1-(pow (x, 2))):
             s.sendto("below".encode("utf-8"), addr_c)
-            belowContador = belowContador + 1
+            
         elif y >= sqrt(1-pow (x, 2)):
             s.sendto("above".encode("utf-8"), addr_c)
         elif y or x not in range (0,1):
             s.sendto("error".encode("utf-8"), addr_c)
 
-    pi = 4.0 * float(belowContador)/num
 
-    print (pi)
 
     salida = s.recvfrom(1024)[0]
 

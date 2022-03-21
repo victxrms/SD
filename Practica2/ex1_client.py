@@ -8,6 +8,8 @@ import struct
 def main(host, port, n):
     # ...
 
+    belowContador = 0
+
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     num = str(n)
@@ -17,8 +19,15 @@ def main(host, port, n):
     for i in range (0, n):
         paquete = struct.pack("ff", random.random(), random.random())
         s.sendto(paquete, (host, port))
+        abajo = s.recvfrom(1024)[0]
+        if (abajo.decode("utf_8") == "below"):
+            belowContador = belowContador + 1
+
+    pi = 4.0 * float(belowContador/n)
+
+    print (pi)
+
     s.sendto("exit".encode("utf_8"), (host, port))
-        
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
