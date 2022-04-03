@@ -30,7 +30,6 @@ def main(host, port):
             s.sendto("error".encode("utf-8"), addr_c)
 
 
-
     salida = s.recvfrom(1024)[0]
 
     if (salida.decode("utf_8") == "exit"):
