@@ -16,19 +16,21 @@ def main(host, port, n):
 
     s.sendto(num.encode("utf_8"), (host, port))
 
-    for i in range (0, n):
-        paquete = struct.pack("ff", random.random(), random.random())
-        s.sendto(paquete, (host, port))
-        abajo = s.recvfrom(1024)[0]
-        if (abajo.decode("utf_8") == "below"):
+    for i in range (0, n):                                              #desde 0 a n 
+        paquete = struct.pack("ff", random.random(), random.random())   #creamos un paquete con la tupla de dos numeros aleatorios entre 0 y 1 (gracias a randon.random())
+        s.sendto(paquete, (host, port))                                 #enviamos el paquete
+        abajo = s.recvfrom(1024)[0]                                     #recibimos el mensaje del servidor
+        if (abajo.decode("utf_8") == "below"):                          #si es abajo, incrementamos el contador
             belowContador = belowContador + 1
 
-    pi = 4.0 * float(belowContador/n)
+    pi = 4.0 * float(belowContador/n)                                   #calculamos pi a través de la fórmula proporcionada
 
-    print (pi)
+    print (pi)                                                          #hacemos un print del valor
 
-    s.sendto("exit".encode("utf_8"), (host, port))
-
+    s.sendto("exit".encode("utf_8"), (host, port))                      #enviamos exit
+    s.close()                                                           #cerramos conexion y salimos
+    quit()
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', default=1024, help="remote port")
