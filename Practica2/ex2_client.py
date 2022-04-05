@@ -2,6 +2,7 @@ import argparse
 import socket
 import struct
 import pickle
+import os 
 
 
 def main(host, port, filein, fileout):
@@ -12,10 +13,16 @@ def main(host, port, filein, fileout):
 
     fichero = open(f'{filein}', mode = 'rt')        #abrimos fichero en modo lectura
     completo = fichero.read()                       #guardamos el fichero completo en la variable completo que sera una string
+    tam = os.path.getsize("./filein.txt")           #calculamos el tamaño del archivos
+    tam = str(tam)                                  
+    s.send(tam.encode("utf-8"))                     #enviamos el tamaño, previamente convertido a string, codificado
+    recepcion = s.recv(1024).decode("utf-8")        #recibimos un mensaje de confirmación del tamaño
+    print(recepcion)                                #lo mostramos por pantalla
     s.send(completo.encode("utf-8"))                #enviamos codificada la cadena completa 
     fichero.close()                                 #cerramos el fichero pues vamos a dejar de trabajar con el 
-
-
+    correcto = s.recv(1024).decode("utf-8")
+    print (correcto)
+    
     lista = s.recv(2048)                            #recibimos la lista 
     lista = pickle.loads(lista)                     #cargamos la lista gracias a la funcion pickle en su respectivo formato
 

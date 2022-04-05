@@ -13,9 +13,17 @@ def main(host, port):
     
     s.listen()                                          
     socket_c, addr_c = s.accept()
+    
+    tam = int(socket_c.recv(1048).decode("utf-8"))          #recibimos el tamaño del fichero y enviamos un mensaje de confirmación
+    socket_c.send("El servidor ha recibido el tamaño".encode("utf-8"))
 
-    fichero = socket_c.recv(2048)                           #guardamos en fichero la string recibida
+    fichero = socket_c.recv(tam)                            #guardamos en fichero la string recibida
     fichero = fichero.decode("utf-8")                       #la decodificamos para poder trabajar con ella
+
+    if len(fichero) == tam:                                 #si el tamaño de "fichero" es igual al recibido se ha recibido correctamente
+        socket_c.send("El archivo se ha enviado correctamente".encode("utf-8"))
+    else:
+        socket_c.send("El archivo no se ha enviado correctamente".encode("utf-8"))
 
     
     contador = 0                                            #ponemos a 0 el contador
@@ -32,6 +40,7 @@ def main(host, port):
     socket_c.send(packpal)                                  #enviamos packpal
 
     socket_c.close()                                        #cerramos conexion
+    s.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
