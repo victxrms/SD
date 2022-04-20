@@ -1,11 +1,7 @@
 import json
 from multiprocessing.sharedctypes import Value
 from bottle import run, request, response, get, post, put, delete
-
-salas = dict()
-usuarios = dict()
-reservas = dict()
-
+from types import SimpleNamespace
 class Sala:
     def __init__(self, roomId, capacity, resources):
         self.roomId
@@ -26,27 +22,46 @@ class Reserva:
         self.startTime = startTime
         self.duration = duration
         self.endTime = endTime
+
+# carga de json en las diferentes clases 
+        
+listSala = []
+dataRm = json.load(['rooms'])
+for room in dataRm:
+    listSala[room] = json.loads(dataRm, object_hook=lambda d: SimpleNamespace(**d))
+    
+listUsuario = []
+dataUs = json.load(['users'])
+for user in dataUs:
+    listUsuario[user] = json.loads(dataUs, object_hook=lambda d: SimpleNamespace(**d))
+    
+listReserva = []
+dataRv = json.load(['bookings'])
+for book in dataUs:
+    listUsuario[book] = json.loads(dataRv, object_hook=lambda d: SimpleNamespace(**d))
+
+#funciones
         
 @post('/login')
 def do_login(username, password):
-    data = json.load()
-    try:
-        data = request.json()
-    except:
-        raise ValueError
-    if data is None:
-        raise ValueError
 
-    for user in data:
-        if 'userName' == username:
-            if 'password' == password:       
+    for user in listUsuario:
+        if user.userName == username:
+            if user.password == password:       
                 return "<p>Informacion correcta.<\p>"
             else:
                 return "<p>Informacion incorrecta.<\p>"
-        
+            
 @post('/addRoom')
-def do_addRoom():
-    data = request.json
+def addRoom (ID, capacidad, recursos):
+    listSala.append(Sala(ID, capacidad, recursos))
+    return "<p>Sala correctamente añadida.<\p>"
+
+@delete('/deleteBooking/bookingId')
+def delBooking (bookID):
+    for book in listReserva:
+        if book.bookingId == bookID:
+            listReserva.remove(book)
+            return "<p>Reserva eliminada correctamente.<\p>"
+            
     
-    ID_room = data.get("ID_room")
-    for id
