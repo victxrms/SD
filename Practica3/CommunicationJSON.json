@@ -1,5 +1,5 @@
 
-data = {
+{
     
     "rooms":
     [
@@ -13,7 +13,7 @@ data = {
             "capacity": 217,
             "resources": ["proyector", "altavoces", "puntero láser"]
         }
-    ]
+    ],
   
     "users":
     [
@@ -23,22 +23,23 @@ data = {
             "password": "passwordSD45"
 
         }
-    ]
+    ],
     
     "books":
     [
         {
+            "salaId": 2,
             "bookingId": 1,
             "DNI": "22334455A",
             "date": "05/04/2022",
             "startTime": "10:30",
             "duration": 160,
-            "endTime": "13:00", 
+            "endTime": "13:00"
         }
-    ]
+    ],
 
 
-    "errorMessage": "No existe el identificador de la reserva"
+    "errorMessage": "No existe el identificador de la reserva",
     "message": "Reserva eliminada"
 
 }
