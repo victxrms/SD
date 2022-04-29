@@ -1,6 +1,15 @@
 {
   "rooms": [
     {
+      "roomId": 1,
+      "capacity": 217,
+      "resources": [
+        "luces",
+        "camara",
+        "accion laser"
+      ]
+    },
+    {
       "roomId": 5,
       "capacity": 217,
       "resources": [
@@ -22,7 +31,9 @@
       "roomId": 7,
       "capacity": 68,
       "resources": [
-        "pollaa"
+        "libros",
+        "ordenadores",
+        "caseta"
       ]
     }
   ],
@@ -31,24 +42,22 @@
       "DNI": "22334455A",
       "userName": "userSD",
       "password": "passwordSD45"
+    },
+    {
+      "DNI": "victor",
+      "userName": "victor",
+      "password": "1234"
     }
   ],
   "books": [
     {
+      "salaId": 2,
       "bookingId": 1,
       "DNI": "victor",
-      "date": "05/04/2022",
-      "startTime": "10:30",
-      "duration": 160,
-      "endTime": "13:10"
-    },
-    {
-      "bookingId": 2,
-      "DNI": "victor",
-      "date": "05/05/2012",
-      "startTime": "10:30",
-      "duration": 160,
-      "endTime": "13:10"
+      "date": "08/10/2008",
+      "startTime": "08:45",
+      "duration": 124,
+      "endTime": "10:49"
     }
   ],
   "errorMessage": "No existe el identificador de la reserva",
