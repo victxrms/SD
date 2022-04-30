@@ -11,7 +11,7 @@
     },
     {
       "roomId": 5,
-      "capacity": 217,
+      "capacity": 129,
       "resources": [
         "proyector",
         "altavoces",
@@ -20,7 +20,7 @@
     },
     {
       "roomId": 6,
-      "capacity": 217,
+      "capacity": 34,
       "resources": [
         "proyector",
         "altavoces",
@@ -35,6 +35,14 @@
         "ordenadores",
         "caseta"
       ]
+    },
+    {
+      "roomId": 3,
+      "capacity": 45,
+      "resources": [
+        "proyector",
+        "libros de accion"
+      ]
     }
   ],
   "users": [
@@ -44,22 +52,20 @@
       "password": "passwordSD45"
     },
     {
-      "DNI": "victor",
+      "DNI": "11223344V",
       "userName": "victor",
-      "password": "1234"
+      "password": "contrasena"
     }
   ],
   "books": [
     {
       "salaId": 2,
       "bookingId": 1,
-      "DNI": "victor",
+      "DNI": "11223344V",
       "date": "08/10/2008",
       "startTime": "08:45",
       "duration": 124,
       "endTime": "10:49"
     }
-  ],
-  "errorMessage": "No existe el identificador de la reserva",
-  "message": "Reserva eliminada"
+  ]
 }

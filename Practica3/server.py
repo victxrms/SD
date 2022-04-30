@@ -40,14 +40,14 @@ def carga():
 def login():
         encontrado = False
         buffer = request.json
-        userpuser = Usuario(buffer['DNI'], buffer['userName'], buffer['password'])
+        userpuser = Usuario(0, buffer['userName'], buffer['password'])
         for usuario in datos['users']:                      # recorre los usuarios
             if usuario['userName']==userpuser.userName:     # si existe 
-                if usuario['password']!=userpuser.password: # y la contraseña es igual a la guardada
+                if usuario['password']==userpuser.password: # y la contraseña es igual a la guardada
                     encontrado = True
-                    return json.dumps(0)              #si no es la misma contraseña, devuelve false
+                    return json.dumps(usuario['DNI'])       #si no es la misma contraseña, devuelve false
         if encontrado == False:    
-            return json.dumps(0)                                      #si no existe el user devuelve false
+            return json.dumps("Credenciales no validas.")   #si no existe el user devuelve false
 
 #funcion añadir sala
 @post('/addRoom')
@@ -56,7 +56,10 @@ def addRoom ():
     idroom = buffer['roomId']
     cant = buffer['capacity']
     recurs = buffer['resources']
-    datos['rooms'].append(Sala(idroom, cant, recurs).__dict__) # guarda en el json el objeto de la clase sala inicializado con los valores introducidos
+    for salas in datos['rooms']:                                # recorremos las salas y comprobamos que el id introducido no existe
+        if salas['roomId'] == idroom:
+            return "<p>Sala ya existe, pruebe otra id.<\p>"
+    datos['rooms'].append(Sala(idroom, cant, recurs).__dict__)  # guarda en el json el objeto de la clase sala inicializado con los valores introducidos
     return "<p>Sala correctamente añadida.<\p>"
 
 #funcion borrar reserva
@@ -109,19 +112,29 @@ def addBooking_():
     hourInit = datetime.strptime(reservon.startTime,format)                                                         #guardamos los valores que utilizaremos en las comparaciones en otras variables
     hourEnd = datetime.strptime(reservon.endTime,format)                                                            #de esta forma evitamos tener que usar nombres tan largos
     bookDate = reservon.date
-    for reservas in datos['books'] :                                                                                #recorremos las reservas y buscamos si existe una con mismo tramo horario y en la misma sala que propone el cliente
-        hhInit = datetime.strptime(reservas['startTime'],format)
-        hhEnd = datetime.strptime(reservas['endTime'],format)
-        if (reservas['salaId']==salaId and reservas['date']==bookDate and ((hhEnd>=hourInit and hourInit>=hhInit) or (hhEnd>=hourEnd and hourEnd>=hhInit))):
-            encontrado = True                                                                                       #si es asi, colocamos el flag de encontrado a True
-            break
+    existe = False
+    for salas in datos['rooms']:
+        if salaId == salas['roomId']:
+            existe = True
+    if not existe == True:
+        encontrado = True
+    else:
+        for reservas in datos['books'] :                                                                            #recorremos las reservas y buscamos si existe una con mismo tramo horario y en la misma sala que propone el cliente
+            hhInit = datetime.strptime(reservas['startTime'],format)
+            hhEnd = datetime.strptime(reservas['endTime'],format)
+            if (reservas['salaId']==salaId and reservas['date']==bookDate and ((hhEnd>=hourInit and hourInit>=hhInit) or (hhEnd>=hourEnd and hourEnd>=hhInit))):
+                encontrado = True                                                                                   #si es asi, colocamos el flag de encontrado a True
+                break
     if encontrado == True:                                                                                          #si lo hemos encontrado quiere decir que debemos mostrar al cliente las salas que estan disponibles en el tramo horario elegido 
         for salas in datos['rooms']:                                                                                #recorremos las salas
+            encontrado = False
             if salas['roomId']!=salaId:                                                                             #buscamos salas diferentes a la que quiere el usuario pues conocemos que esta ocupada
                 idDeSala = salas['roomId']
                 for reservas in datos['books']:                                                                     #recorremos las reservas para poder comparar los horarios en los que estan ocupadas las salas
-                    if (reservas['salaId'] ==idDeSala and reservas['date']==bookDate and ((hhEnd>=hourInit and hourInit>=hhInit) or (hhEnd>=hourEnd and hourEnd>=hhInit))):
-                        listaDisp.append(salas)
+                    if not (reservas['salaId'] ==idDeSala and reservas['date']==bookDate and ((hhEnd>=hourInit and hourInit>=hhInit) or (hhEnd>=hourEnd and hourEnd>=hhInit))):
+                        if not(encontrado): 
+                            listaDisp.append(salas)
+                            encontrado = True
         return json.dumps({'error': "La sala que desea reservar está ocupada", 'listaDisp': listaDisp}, indent=2)   #devolvemos el error y la lista de salas disponibles para que el cliente elija de nuevo
     else:                                                                                                           #si no lo hemos encontrado, siginifica que esta libre esa sala en ese horario
         proxID = int(datos['books'][-1]['bookingId'])+1                                                             #calculamos el id de la reserva en base al anterior
